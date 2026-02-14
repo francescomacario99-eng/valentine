@@ -4,9 +4,9 @@
         <title><!DOCTYPE html></title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="bear-note-unique-identifier" content="4554AB3F-67A4-45CF-88A3-1FD7DB88A17C">
-        <meta name="created" content="2026-02-14T12:48:37+0100">
-        <meta name="modified" content="2026-02-14T12:49:30+0100">
+        <meta name="bear-note-unique-identifier" content="2C27742B-626B-45C8-95AF-5138C4371C2C">
+        <meta name="created" content="2026-02-14T12:54:32+0100">
+        <meta name="modified" content="2026-02-14T12:54:36+0100">
         <meta name="tags" content="">
         <meta name="last device" content="iPhone">
         
@@ -193,7 +193,7 @@ button {
 .message {
     font-size: 36px;
     color: #ff4d6d;
-    margin-top: 100px;
+    margin-top: 50px;
     opacity: 0;
     transform: scale(0.8);
     animation: popIn 1.5s forwards;
@@ -220,12 +220,12 @@ img {
 .heart {
     position: absolute;
     font-size: 20px;
-    animation: float 4s linear infinite;
+    animation: float linear forwards;
 }
 
 @keyframes float {
-    from { transform: translateY(100vh); opacity: 1; }
-    to { transform: translateY(-10vh); opacity: 0; }
+    0% { transform: translateY(100vh); opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
 }
 </style>
 </head>
@@ -235,45 +235,69 @@ img {
 <p><h1>Would you be my Valentine? 💌</h1></p><br>
 <p><button id="yesBtn">Yes 🧡</button><br>
 <button id="noBtn">No 💔</button></p><br>
+<div id="messageContainer"></div>
+<br>
+<!-- Audio -->
+<p><audio id="popSound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio></p><br>
 <script>
 let noClicks = 0;
 let yesBtn = document.getElementById("yesBtn");
 let noBtn = document.getElementById("noBtn");
+let messageContainer = document.getElementById("messageContainer");
+let popSound = document.getElementById("popSound");
 
+// Pulsante "No" interattivo
 noBtn.addEventListener("click", function() {
     noClicks++;
     yesBtn.style.transform = "scale(" + (1 + noClicks * 0.2) + ")";
-    noBtn.style.transform = "scale(" + (1 - noClicks * 0.1) + ")";
-
+    noBtn.style.transform = "scale(" + Math.max(0.5, 1 - noClicks * 0.1) + ")";
     if (noClicks >= 5) {
         noBtn.style.display = "none";
     }
 });
 
+// Pulsante "Yes"
 yesBtn.addEventListener("click", function() {
-    document.body.innerHTML = `
-        <div class="message"> Smack 🪩🌷🧡 mi manchi già </div>
-        <img src="valentine.GIF">
+    // Riproduce il suono
+    popSound.currentTime = 0;
+    popSound.play();
+
+    // Mostra messaggio e immagine
+    messageContainer.innerHTML = `
+        <div class="message">Smack 🪩🌷🧡 mi manchi già</div>
+        <img src="https://tenor.com/9leu.gif" alt="Valentine GIF">
     `;
     createHearts();
 });
 
+// Funzione cuori fluttuanti
 function createHearts() {
     setInterval(function() {
         let heart = document.createElement("div");
         heart.classList.add("heart");
         heart.innerHTML = "🧡";
+
+        // Posizione e dimensione casuale
         heart.style.left = Math.random() * 100 + "vw";
         heart.style.fontSize = (Math.random() * 20 + 20) + "px";
+
+        // Colori casuali
+        let colors = ['#ff4d6d', '#ff99aa', '#ffe6eb', '#ffb3c1'];
+        heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+        // Durata animazione casuale
+        heart.style.animationDuration = (3 + Math.random() * 2) + "s";
+
         document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 4000);
+
+        // Rimuove cuore dopo animazione
+        setTimeout(() => heart.remove(), 5000);
     }, 300);
 }
 </script>
 <br>
 </body>
 </html>
-
         </div>
     </body>
 </html>
